@@ -1,0 +1,7 @@
+https://www.w3schools.com/
+https://www.w3schools.com/js/js_if_else.asp
+https://www.w3schools.com/python/python_lists_remove.asp
+https://www.w3schools.com/tags/att_input_type_range.asp
+https://www.w3schools.com/js/js_arrays.asp
+https://www.w3schools.com/tags/tag_div.ASP
+https://stackoverflow.com/questions/905033/how-to-use-hover-in-css
