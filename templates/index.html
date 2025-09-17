@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quiz list
+{% endblock %}
+
+{% block main %}
+    <h1>Quiz list</h1>
+    <div >
+        <input id="search" name="search" placeholder="Search" type="text">
+    </div>
+    <select name="order" id="order">
+        <option value="Al">Alphabetical A-Z</option>
+        <option value="Rl">Alphabetical Z-A</option>
+        <option value="HLA">Highest to Lowest Average</option>
+        <option value="LHA">Lowest to Highest Average</option>
+        <option value="COM">Completed</option>
+        <option value="INCOM">Incompleted</option>
+    </select>
+    <p id='val'></p>
+    <br>
+    <section id="content">
+        <ul id="dis">
+        </ul>
+    </section>
+
+    <script>
+        document.getElementById("search").addEventListener("input", displayList);
+        document.getElementById("order").addEventListener("change", displayList);
+
+        function removeNumbers(str) {
+            return str.replace(/[0-9\,\.\ ]/g, '');
+        }
+        function removeCommas(str) {
+            return str.replace(/[,]/g, ' ')
+        }
+        function removeLetters(str) {
+            str = str.toLowerCase();
+            return str.replace(/[a-z\,]/g, '');
+        }
+        function getFirstNumber(str) {
+            match = str.match(/\d+/);
+            return match ? parseInt(match[0], 10) : null;
+        }
+        function getSecondNumber(str) {
+            match = str.match(/\d+/g);
+            return match && match[1] ? parseInt(match[1], 10) : null;
+        }
+
+        function reordering(list, orderer) {
+            if (orderer.value == "Al") {
+                list.sort();
+            } else if (orderer.value == "Rl") {
+                list.sort().reverse();
+            } else if (orderer.value == "HLA") {
+                list.sort((fir, sec) => {
+                    const fNum = getSecondNumber(removeLetters(String(fir)));
+                    const sNum = getSecondNumber(removeLetters(String(sec)));
+                    return sNum - fNum;
+                });
+            } else if (orderer.value == "LHA") {
+                list.sort((fir, sec) => {
+                    const fNum = getSecondNumber(removeLetters(String(fir)));
+                    const sNum = getSecondNumber(removeLetters(String(sec)));
+                    return fNum - sNum;
+                });
+            } else if (orderer.value == "COM") {
+                list = list
+                    .filter(item => getFirstNumber(removeLetters(String(item))) !== 404)
+            } else if (orderer.value == "INCOM") {
+                list = list
+                    .filter(item => getFirstNumber(removeLetters(String(item))) == 404)
+            }
+            return list;
+        }
+        
+        function displayList() {
+            let list = {{ files | safe }};
+            const scores = {{ values | safe }};
+            const element = document.getElementById("dis");
+            const searcher = document.getElementById('search');
+            const orderer = document.getElementById('order');
+
+            element.innerHTML = "";
+
+            for (let i in list) {
+                //document.getElementById('val').innerHTML = searcher.value
+                list = reordering(list, orderer)
+                if (list[i].toLowerCase().includes(searcher.value.toLowerCase().trim()) || searcher.value.trim() == "") { 
+                    let newelem = element.appendChild(document.createElement("li"));
+
+                    let newlink = element.appendChild(document.createElement("a"));
+                    newlink.href = `/quiz?category=${encodeURIComponent(removeNumbers(String(list[i])))}`;
+                    newlink.textContent = removeNumbers(String(list[i]));
+                    newelem.appendChild(newlink);
+
+                    let details = element.appendChild(document.createElement("p"));
+                    details.textContent = 'Past Score: ' + getFirstNumber(removeLetters(String(list[i]))) + '%';
+                    if (details.textContent == 'Past Score: 404%') {
+                        details.textContent = 'Quiz not attempted';
+                    }
+                    newelem.appendChild(details);
+
+                    let av = element.appendChild(document.createElement("p"));
+                    av.textContent = 'Average Score: ' + getSecondNumber(removeLetters(String(list[i]))) + '%';
+                    newelem.appendChild(av);
+
+                    element.appendChild(document.createElement("br"));
+                }
+            }
+        }
+        displayList();
+
+    </script>
+{% endblock %}

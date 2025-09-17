@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Test Yourself
+{% endblock %}
+
+{% block main %}
+    <h1>{{ category}} Result Page</h1>
+    <br />
+    <h2> You are {{ result }}% a {{ typ }}</h2>
+    <br />
+    <h2 id="result"></h2>
+    <h2 id="avres"></h2>
+    <h2> Highest Score: 100% </h2>
+
+    <script>
+        const results = {{ result | safe }};
+        const avg = {{ average | safe }};
+        document.getElementById("result").innerHTML = "Your Score: " + results + "%"
+        document.getElementById("avres").innerHTML = "Average Score: " + avg + "%"
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <div class="cent">
+        <div class="logs">
+            <h1>Register</h1>
+            <form action="/register" method="post">
+                <div >
+                    <input autocomplete="off" autofocus  id="username" name="username" placeholder="Username" type="text">
+                </div>
+                <br/>
+                <div >
+                    <input  id="email" name="email" placeholder="Email address" type="text">
+                </div>
+                <br/>
+                <div >
+                    <input  id="password" name="password" placeholder="Password" type="password">
+                </div>
+                <br/>
+                <div >
+                    <input  id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" type="password">
+                </div>
+                <br/>
+                <button class="btn-primary"  type="submit">Sign Up</button>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

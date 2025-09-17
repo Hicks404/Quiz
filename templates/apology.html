@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Apology
+{% endblock %}
+
+{% block main %}
+<section class="apology">
+    <h1>Error {{ top }}</h1>
+    <img alt="{{ top }}" class="border img-fluid" src="static/mario.jpg" title="{{ top }}" width="400px">
+    <h1>{{ bottom }}</h1>
+</section>
+{% endblock %}
